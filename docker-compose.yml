@@ -1,0 +1,30 @@
+version: '3.2'
+services:
+  nginx-pinba:
+    image: anchorfree/nginx-pinba:latest
+    container_name: elite-nginx
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - target: 80
+      published: 80
+      protocol: tcp
+      mode: host
+    volumes:
+      - type: bind
+        source: ./bats
+        target: /bats
+    depends_on:
+      - pinba
+  pinba:
+    image: tony2001/pinba:latest
+    ports:
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
+      - target: 30002
+        published: 30002
+        protocol: udp
+        mode: host
